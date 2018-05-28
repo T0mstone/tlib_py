@@ -36,3 +36,12 @@ def map_value(val, start1, stop1, start2, stop2):
     range2 = stop2 - start2
     percent = (val - start1) / range1
     return (percent * range2) + start2
+
+
+def index_tuples(iterable):
+    return [(i, iterable[i]) for i in range(len(iterable))]
+
+
+def custom_error(err_name, err_desc):
+    print(err_name + ':', err_desc)
+    raise Exception()
