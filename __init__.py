@@ -1,7 +1,2 @@
-import logger
-import level0.tools
-
-try:
-    del level0
-except NameError:
-    pass
+from tlib.no_imports import logger
+from tlib.no_imports import tools
