@@ -14,18 +14,15 @@ class Matrix:
         self.content_array = array_2d
 
     def __repr__(self):
-        ret = ''
-        ret += 'Matrix['
-        first = True
-        for row in self.content_array:
-            rrow = [round(x, 10) for x in row]
-            if first:
-                ret += str(rrow)
-                first = False
-            else:
-                ret += '\n' + str(rrow)
-        ret += ']'
-        return ret
+        # number of decimal places to round to
+        round_decimals = 3
+
+        rounded = [
+         [round(x, round_decimals) for x in row] for row in self.content_array]
+        strs = [str(row) for row in rounded]
+        joined = '\n'.join(strs)
+
+        return 'Matrix[' + joined + ']'
 
     def __iter__(self):
         return iter(self.content_array)
