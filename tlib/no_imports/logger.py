@@ -1,5 +1,6 @@
 class FormatCodes:
     RESET = '\033[0m'
+
     @staticmethod
     def FORMAT(fgcol=None, bgcol=None, modifiers=None):
         prefix = '\033['
@@ -15,7 +16,9 @@ class FormatCodes:
         fgadd = 30
         bgadd = 40
 
-        colors = ['black', 'red', 'green', 'yellow', 'blue', 'magenta', 'cyan', 'white']
+        colors = [
+            'black', 'red', 'green', 'yellow',
+            'blue', 'magenta', 'cyan', 'white']
 
         result = ''
         if modifiers is not None:
@@ -40,12 +43,13 @@ class FormatCodes:
 
         return prefix + result + suffix
 
-class logger:
+
+class Logger:
     def __init__(self, name):
         self.name = name
 
     def log(self, *args, **kwargs):
-        COL = FormatCodes.FORMAT(modifiers=('bold','underline'))
+        COL = FormatCodes.FORMAT(modifiers=('bold', 'underline'))
         RES = FormatCodes.RESET
-        COL2 = FormatCodes.FORMAT(modifiers=['bold'])
+        COL2 = FormatCodes.FORMAT(modifiers=('bold',))
         print(COL + self.name + RES, COL2 + ':  ' + RES, *args, **kwargs)
