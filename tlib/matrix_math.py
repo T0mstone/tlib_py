@@ -2,16 +2,26 @@ from tools import custom_error, index_tuples
 from copy import copy
 
 
+def mulsum(self, other, row: tuple, col: tuple):
+    if len(row) != len(col):
+        self.__dimension_error__(other, 'matrix multiplication')
+    muls = [row[i] * col[i] for i in range(len(row))]
+    return sum(muls)
+
+
 class Matrix:
+    __MAT_TYPE__ = 'Matrix'
+
     def __init__(self, array_2d):
-        lens = [len(row) for row in array_2d]
-        len_comparisons = [rowlen == lens[0] for rowlen in lens]
+        lens = tuple(len(row) for row in array_2d)
+        len_comparisons = tuple(rowlen == lens[0] for rowlen in lens)
         if False in len_comparisons:
             # one of the rows has a different length than the others
             custom_error(
                 'DimensionError',
                 self + " has to have a uniform number of columns")
-        self.content_array = array_2d
+        tups = [tuple(row) for row in array_2d]
+        self.content_tuple = tuple(tups)
 
     def __repr__(self):
         # number of decimal places to round to
@@ -22,97 +32,89 @@ class Matrix:
         strs = [str(row) for row in rounded]
         joined = '\n'.join(strs)
 
-        return 'Matrix[' + joined + ']'
+        return 'Matrix(' + joined + ')'
 
     def __iter__(self):
-        return iter(self.content_array)
+        return iter(self.content_tuple)
 
     def transposed(self):
-        new_mat_arr = list(zip(*self.content_array))
+        new_mat_arr = list(zip(*self.content_tuple))
         return Matrix(new_mat_arr)
 
     def dimensions(self):
-        dimy = len(self.content_array)
-        dimx = len(self.content_array[0])
+        dimy = len(self.content_tuple)
+        dimx = len(self.content_tuple[0])
         return dimx, dimy
 
+    def __dimension_error__(self, other, desc_str):
+        sd, od = self.dimensions(), other.dimensions()
+        msg = f"unmatching matrix dimensions {sd} and {od} for operation: "
+        custom_error('DimensionError', msg + desc_str)
+
     def __mul__(self, other):
-        if type(other) in [int, float]:
-            new_content_array = copy(self.content_array)
-            for y in range(len(self.content_array)):
-                curr_y = self.content_array[y]
-                for x in range(len(curr_y)):
-                    new_content_array[y][x] = other * self.content_array[y][x]
-            typ = type(self)
-            if typ is Vector:
-                single_values = [x[0] for x in new_content_array]
-                return typ(*single_values)
-            else:
-                return typ(new_content_array)
-        elif type(other) in [Matrix, Vector]:
-            sum_2d = []
-            for row, curr_row_here in index_tuples(self.content_array):
-                tp = other.transposed()
-                sum_row = []
-                for col, curr_col_there in index_tuples(tp.content_array):
-                    if len(curr_row_here) != len(curr_col_there):
-                        err_msg = f"{self} has dimensions " +\
-                            f"{self.dimensions()} while {other} has" +\
-                            f" dimensions {other.dimensions()}"
-                        custom_error('DimensionError', err_msg)
-                    muls = []
-                    for i in range(len(curr_row_here)):
-                        mul = curr_row_here[i] * curr_col_there[i]
-                        muls.append(mul)
-                    sum_row.append(sum(muls))
-                sum_2d.append(sum_row)
-            return Matrix(sum_2d)
+        # other is matrix or vector
+        if hasattr(other, '__MAT_TYPE__'):
+            global mulsum
+            # transpose because that switches rows with cols and we do col*row
+            tp = other.transposed()
+            new_array_2d = []
+            # multiply elementwise, row * col
+            for row_i, row in index_tuples(self.content_tuple):
+                ct = tp.content_tuple
+                new_row = tuple(
+                    mulsum(self, other, row, other_col) for other_col in ct)
+                new_array_2d.append(new_row)
+            return Matrix(new_array_2d)
+        # other is scalar
+        elif type(other) in [int, float]:
+            # multipy every element by that scalar
+            new_carray = [
+                [item * other for item in row] for row in self.content_tuple]
+            new_ct = tuple(tuple(row) for row in new_carray)
+            return Matrix(new_ct)
         else:
             raise TypeError(
                     'Unknown type for matrix multiplication:', type(other))
 
     def __add__(self, other):
-        if type(other) in [Matrix, Vector]:
-            if self.dimensions() != other.dimensions():
-                err_msg = f"{self} has dimensions " +\
-                    f"{self.dimensions()} while {other} has" +\
-                    f" dimensions {other.dimensions()}"
-                custom_error('DimensionError', err_msg)
-            new_arr_2d = []
-            for row in range(len(self.content_array)):
-                curr_row = []
-                for col in range(len(self.content_array[row])):
-                    self_i = self.content_array[row][col]
-                    other_i = other.content_array[row][col]
-                    curr_row.append(self_i + other_i)
-                new_arr_2d.append(curr_row)
-            return Matrix(new_arr_2d)
+        if hasattr(other, '__MAT_TYPE__'):
+            s_ct = self.content_tuple
+            o_ct = other.content_tuple
+
+            arr = [[s_ct[row][x] + o_ct[row][x] for x in row] for row in s_ct]
+            return Matrix(arr)
 
 
-class Vector(Matrix):
-    def __init__(self, *args):
-        if type(args[0]) in [Matrix, Vector]:
-            in_rows = args[0].content_array
-        else:
-            in_rows = [[x] for x in args]
-        super().__init__(in_rows)
+# TODO: readd vector class
+# class Vector(Matrix):
+#     __MAT_TYPE__ = 'Vector'
+#
+#     def __init__(self, *args):
+#         if type(args[0]) in [Matrix, Vector]:
+#             in_rows = args[0].content_array
+#         else:
+#             in_rows = [[x] for x in args]
+#         super().__init__(in_rows)
+#
+#     def __repr__(self):
+#         ret = 'Vector('
+#         first = True
+#         for row in self.content_array:
+#             rrow = [round(x, 10) for x in row]
+#             if first:
+#                 ret += str(rrow[0])
+#                 first = False
+#             else:
+#                 ret += ', ' + str(rrow[0])
+#         ret += ')'
+#         return ret
+#
+#     def dot(self, other):
+#         tp = self.transposed()
+#         return tp * other
+#
+#     def __iter__(self):
+#         return iter(x[0] for x in self.content_array)
 
-    def __repr__(self):
-        ret = 'Vector('
-        first = True
-        for row in self.content_array:
-            rrow = [round(x, 10) for x in row]
-            if first:
-                ret += str(rrow[0])
-                first = False
-            else:
-                ret += ', ' + str(rrow[0])
-        ret += ')'
-        return ret
 
-    def dot(self, other):
-        tp = self.transposed()
-        return tp * other
-
-    def __iter__(self):
-        return iter(x[0] for x in self.content_array)
+del mulsum
