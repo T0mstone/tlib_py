@@ -1,5 +1,4 @@
 from tools import custom_error, index_tuples
-from copy import copy
 
 
 def mulsum(self, other, row: tuple, col: tuple):
@@ -85,36 +84,37 @@ class Matrix:
             return Matrix(arr)
 
 
-# TODO: readd vector class
-# class Vector(Matrix):
-#     __MAT_TYPE__ = 'Vector'
-#
-#     def __init__(self, *args):
-#         if type(args[0]) in [Matrix, Vector]:
-#             in_rows = args[0].content_array
-#         else:
-#             in_rows = [[x] for x in args]
-#         super().__init__(in_rows)
-#
-#     def __repr__(self):
-#         ret = 'Vector('
-#         first = True
-#         for row in self.content_array:
-#             rrow = [round(x, 10) for x in row]
-#             if first:
-#                 ret += str(rrow[0])
-#                 first = False
-#             else:
-#                 ret += ', ' + str(rrow[0])
-#         ret += ')'
-#         return ret
-#
-#     def dot(self, other):
-#         tp = self.transposed()
-#         return tp * other
-#
-#     def __iter__(self):
-#         return iter(x[0] for x in self.content_array)
+class Vector(Matrix):
+    __MAT_TYPE__ = 'Vector'
+
+    def __init__(self, *args):
+        # input is a matrix or vector
+        if hasattr(args[0], '__MAT_TYPE__'):
+            # just copy content array
+            cont_arr = args[0].content_array
+        # input are 1+ numbers as *args
+        else:
+            # create 1*n matrix
+            cont_arr = [[x] for x in args]
+        super().__init__(cont_arr)
+
+    def __repr__(self):
+        # number of decimal places to round to
+        round_decimals = 3
+
+        rounded = [
+         [round(x, round_decimals) for x in row] for row in self.content_array]
+        strs = [str(row[0]) for row in rounded]
+        joined = '\n'.join(strs)
+
+        return 'Vector(' + joined + ')'
+
+    def dot(self, other):
+        tp = self.transposed()
+        return tp * other
+
+    def __iter__(self):
+        return iter(x[0] for x in self.content_array)
 
 
 del mulsum
