@@ -1,10 +1,7 @@
-import tLib.logger
-from tLib.level0 import *
-from tLib.level1 import *
-import sys
-sys.path.append('/Users/tomjonas/PycharmProjects/plotEngine')
-import plot_engine
+import logger
+import level0.tools
+
 try:
-    del level0, level1
+    del level0
 except NameError:
     pass
