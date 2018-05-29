@@ -82,9 +82,13 @@ class Matrix:
             s_ct = self.content_tuple
             o_ct = other.content_tuple
 
-            arr = [
-                [s_ct[y][x] + o_ct[y][x] for x, col in index_tuples(row)]
-                for y, row in index_tuples(s_ct)]
+            try:
+                arr = [
+                    [s_ct[y][x] + o_ct[y][x] for x, col in index_tuples(row)]
+                    for y, row in index_tuples(s_ct)]
+            except:
+                print(s_ct, o_ct)
+                raise
             return Matrix(arr)
 
 
