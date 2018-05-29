@@ -27,7 +27,7 @@ class Matrix:
         round_decimals = 3
 
         rounded = [
-         [round(x, round_decimals) for x in row] for row in self.content_array]
+         [round(x, round_decimals) for x in row] for row in self.content_tuple]
         strs = [str(row) for row in rounded]
         joined = '\n'.join(strs)
 
@@ -91,7 +91,7 @@ class Vector(Matrix):
         # input is a matrix or vector
         if hasattr(args[0], '__MAT_TYPE__'):
             # just copy content array
-            cont_arr = args[0].content_array
+            cont_arr = args[0].content_tuple
         # input are 1+ numbers as *args
         else:
             # create 1*n matrix
@@ -103,7 +103,7 @@ class Vector(Matrix):
         round_decimals = 3
 
         rounded = [
-         [round(x, round_decimals) for x in row] for row in self.content_array]
+         [round(x, round_decimals) for x in row] for row in self.content_tuple]
         strs = [str(row[0]) for row in rounded]
         joined = '\n'.join(strs)
 
@@ -114,7 +114,7 @@ class Vector(Matrix):
         return tp * other
 
     def __iter__(self):
-        return iter(x[0] for x in self.content_array)
+        return iter(x[0] for x in self.content_tuple)
 
 
 del mulsum
