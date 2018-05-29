@@ -1,4 +1,4 @@
-from tools import custom_error, index_tuples
+from .no_imports.tools import custom_error, index_tuples
 
 
 def mulsum(self, other, row: tuple, col: tuple):
