@@ -135,7 +135,7 @@ class Vector(Matrix):
         return squaresum ** 0.5
 
     def normalized(self):
-        return self / self.mag()
+        return Vector(self / self.mag())
 
     def __iter__(self):
         return iter(x[0] for x in self.content_tuple)
