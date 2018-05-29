@@ -93,6 +93,12 @@ class Matrix:
                 for y, row in index_tuples(s_ct)]
             return Matrix(arr)
 
+    def __eq__(self, other):
+        if hasattr(other, '__MAT_TYPE__'):
+            if self.content_tuple == other.content_tuple:
+                return True
+        return False
+
 
 class Vector(Matrix):
     __MAT_TYPE__ = 'Vector'
