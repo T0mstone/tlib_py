@@ -75,7 +75,7 @@ class Matrix:
             raise TypeError(
                     'Unknown type for matrix multiplication:', type(other))
 
-    def __div__(self, other):
+    def __truediv__(self, other):
         if type(other) in [int, float]:
             return self * (1 / other)
         else:
