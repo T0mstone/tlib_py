@@ -1,15 +1,14 @@
 from .no_imports.tools import custom_error, index_tuples
 
 
-def mulsum(self, other, row: tuple, col: tuple):
-    if len(row) != len(col):
-        self.__dimension_error__(other, 'matrix multiplication')
-    muls = [row[i] * col[i] for i in range(len(row))]
-    return sum(muls)
-
-
 class Matrix:
     __MAT_TYPE__ = 'Matrix'
+
+    def mulsum(self, other, row: tuple, col: tuple):
+        if len(row) != len(col):
+            self.__dimension_error__(other, 'matrix multiplication')
+        muls = [row[i] * col[i] for i in range(len(row))]
+        return sum(muls)
 
     def __init__(self, array_2d):
         lens = tuple(len(row) for row in array_2d)
@@ -59,10 +58,10 @@ class Matrix:
             new_array_2d = []
             # multiply elementwise, row * col
             for row_i, row in index_tuples(self.content_tuple):
-                global mulsum
                 ct = tp.content_tuple
                 new_row = tuple(
-                    mulsum(self, other, row, other_col) for other_col in ct)
+                    self.mulsum(self, other, row, other_col)
+                    for other_col in ct)
                 new_array_2d.append(new_row)
             return Matrix(new_array_2d)
         # other is scalar
