@@ -1,3 +1,4 @@
 .DS_STORE
 __pycache__/
-**/__pycache__/
+tlib/__pycache__/
+tlib/no_imports/__pycache__/
