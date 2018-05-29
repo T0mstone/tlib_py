@@ -121,7 +121,7 @@ class Vector(Matrix):
         rounded = [
          [round(x, round_decimals) for x in row] for row in self.content_tuple]
         strs = [str(row[0]) for row in rounded]
-        joined = '\n'.join(strs)
+        joined = ', '.join(strs)
 
         return 'Vector(' + joined + ')'
 
