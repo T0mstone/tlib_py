@@ -120,5 +120,3 @@ class Vector(Matrix):
     def __iter__(self):
         return iter(x[0] for x in self.content_tuple)
 
-
-del mulsum
