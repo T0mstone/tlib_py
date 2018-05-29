@@ -77,15 +77,13 @@ class Matrix:
 
     def __add__(self, other):
         if hasattr(other, '__MAT_TYPE__'):
-            def rl(x):
-                return range(len(x))
 
             s_ct = self.content_tuple
             o_ct = other.content_tuple
 
             arr = [
-                [s_ct[row][x] + o_ct[row][x] for x in rl(row)]
-                for row in rl(s_ct)]
+                [s_ct[y][x] + o_ct[y][x] for x, col in index_tuples(row)]
+                for y, row in index_tuples(s_ct)]
             return Matrix(arr)
 
 
