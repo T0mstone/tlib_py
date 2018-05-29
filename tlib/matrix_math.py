@@ -128,5 +128,8 @@ class Vector(Matrix):
         squaresum = sum(x ** 2 for x in tuple(self))
         return squaresum ** 0.5
 
+    def normalized(self):
+        return self / self.mag()
+
     def __iter__(self):
         return iter(x[0] for x in self.content_tuple)
