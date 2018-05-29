@@ -59,6 +59,7 @@ class Matrix:
             new_array_2d = []
             # multiply elementwise, row * col
             for row_i, row in index_tuples(self.content_tuple):
+                global mulsum
                 ct = tp.content_tuple
                 new_row = tuple(
                     mulsum(self, other, row, other_col) for other_col in ct)
