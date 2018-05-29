@@ -50,3 +50,7 @@ def custom_error(err_name, err_desc):
 def cutoff(min, max, value):
     maxed = value if value <= max else max
     return maxed if maxed >= min else min
+
+
+def round_tuple(tup: tuple, decimals=0):
+    return tuple(round(x, decimals) for x in tup)
