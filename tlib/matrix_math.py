@@ -75,6 +75,13 @@ class Matrix:
             raise TypeError(
                     'Unknown type for matrix multiplication:', type(other))
 
+    def __div__(self, other):
+        if type(other) in [int, float]:
+            return self * (1 / other)
+        else:
+            raise TypeError(
+                    'Unknown type for matrix division:', type(other))
+
     def __add__(self, other):
         if hasattr(other, '__MAT_TYPE__'):
 
