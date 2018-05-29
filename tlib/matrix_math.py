@@ -137,5 +137,8 @@ class Vector(Matrix):
     def normalized(self):
         return Vector(self / self.mag())
 
+    def get_value(self, i):
+        return self.content_tuple[i][0]
+
     def __iter__(self):
         return iter(x[0] for x in self.content_tuple)
