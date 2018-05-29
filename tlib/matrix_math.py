@@ -116,5 +116,10 @@ class Vector(Matrix):
         tp = self.transposed()
         return tp * other
 
+    def mag(self):
+        # pythagoras
+        squaresum = sum(x ** 2 for x in tuple(self))
+        return squaresum ** 0.5
+
     def __iter__(self):
         return iter(x[0] for x in self.content_tuple)
