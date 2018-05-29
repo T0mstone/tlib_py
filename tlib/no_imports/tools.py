@@ -45,3 +45,8 @@ def index_tuples(iterable):
 def custom_error(err_name, err_desc):
     print(err_name + ':', err_desc)
     raise Exception()
+
+
+def cutoff(min, max, value):
+    maxed = value if value <= max else max
+    return maxed if maxed >= min else min
