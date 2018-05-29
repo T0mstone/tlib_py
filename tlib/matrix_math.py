@@ -60,7 +60,7 @@ class Matrix:
             for row_i, row in index_tuples(self.content_tuple):
                 ct = tp.content_tuple
                 new_row = tuple(
-                    self.mulsum(self, other, row, other_col)
+                    self.mulsum(other, row, other_col)
                     for other_col in ct)
                 new_array_2d.append(new_row)
             return Matrix(new_array_2d)
@@ -81,13 +81,9 @@ class Matrix:
             s_ct = self.content_tuple
             o_ct = other.content_tuple
 
-            try:
-                arr = [
-                    [s_ct[y][x] + o_ct[y][x] for x, col in index_tuples(row)]
-                    for y, row in index_tuples(s_ct)]
-            except:
-                print(s_ct, o_ct)
-                raise
+            arr = [
+                [s_ct[y][x] + o_ct[y][x] for x, col in index_tuples(row)]
+                for y, row in index_tuples(s_ct)]
             return Matrix(arr)
 
 
