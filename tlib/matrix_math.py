@@ -1,5 +1,4 @@
-from .basic_tools.collection_tools import ipairs as index_tuples
-# from .no_imports.tools import custom_error, index_tuples
+from .basic_tools.collection_tools import ipairs
 
 def custom_error(err_name, err_desc):
     print(err_name + ':', err_desc)
@@ -62,7 +61,7 @@ class Matrix:
             tp = other.transposed()
             new_array_2d = []
             # multiply elementwise, row * col
-            for row_i, row in index_tuples(self.content_tuple):
+            for row_i, row in ipairs(self.content_tuple):
                 ct = tp.content_tuple
                 new_row = tuple(
                     self.mulsum(other, row, other_col)
@@ -94,8 +93,8 @@ class Matrix:
             o_ct = other.content_tuple
 
             arr = [
-                [s_ct[y][x] + o_ct[y][x] for x, col in index_tuples(row)]
-                for y, row in index_tuples(s_ct)]
+                [s_ct[y][x] + o_ct[y][x] for x, col in ipairs(row)]
+                for y, row in ipairs(s_ct)]
             return Matrix(arr)
 
     def __eq__(self, other):
