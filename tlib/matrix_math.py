@@ -1,4 +1,9 @@
-from .no_imports.tools import custom_error, index_tuples
+from .basic_tools.collection_tools import ipairs as index_tuples
+# from .no_imports.tools import custom_error, index_tuples
+
+def custom_error(err_name, err_desc):
+    print(err_name + ':', err_desc)
+    raise Exception()
 
 
 class Matrix:
@@ -104,13 +109,13 @@ class Vector(Matrix):
     __MAT_TYPE__ = 'Vector'
 
     def __init__(self, *args):
-        # input is a matrix or vector
         if hasattr(args[0], '__MAT_TYPE__'):
-            # just copy content array
+            # input is a matrix or vector
+            # => just copy content array
             cont_arr = args[0].content_tuple
-        # input are 1+ numbers as *args
         else:
-            # create 1*n matrix
+            # input are 1+ numbers as *args
+            # => create 1*n matrix
             cont_arr = [[x] for x in args]
         super().__init__(cont_arr)
 
